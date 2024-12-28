@@ -16,13 +16,17 @@ type Package = {
   description: string;
 };
 
-export default async function Page() {
+type Params = Promise<{ slug: string }>;
+
+export default async function Page({ params }: { params: Params }) {
+  const { slug } = await params;
+
   let pkg: Package | null = null;
   let errorMessage: string = "";
 
   try {
     const response = await axios.get(
-      process.env.API + "/package/pranata-komputer-ahli-pertama-part-1"
+      `${process.env.API}/package/${slug}`
     );
     pkg = response.data.data;
   } catch (error) {
