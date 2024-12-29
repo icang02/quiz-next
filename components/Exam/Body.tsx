@@ -91,7 +91,7 @@ export default function Body({ attempt }: { attempt: Attempt }) {
         questions={attempt.package.questions}
       />
       <div className="flex-1 p-3 md:p-6">
-        <Header packageName={attempt.package.name} />
+        <Header attempt={attempt} />
         <Content questions={attempt.package.questions} attemptId={attempt.id} />
       </div>
     </>

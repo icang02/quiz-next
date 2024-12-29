@@ -1,3 +1,4 @@
+import ButtonRestart from "@/components/EaxmScore/ButtonRestart";
 import { Button } from "@/components/ui/button";
 import {
   Card,
@@ -48,11 +49,7 @@ export default async function page({ params }: { params: Params }) {
           </div>
         </CardContent>
         <CardFooter className="flex items-center justify-between">
-          <Link href={`/ujian/${attempt.id}`}>
-            <Button variant={"destructive"} className="w-fit">
-              Ulangi Ujian
-            </Button>
-          </Link>
+          <ButtonRestart attemptId={parseInt(attemptId)} />
           <Link href={`/`}>
             <Button className="w-fit">Selesai</Button>
           </Link>
