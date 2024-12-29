@@ -64,7 +64,13 @@ export const useUserAnswersStore = create<UserAnswersStore>((set) => ({
 }));
 // =====================================================================
 
-export default function Body({ attempt }: { attempt: Attempt }) {
+export default function Body({
+  attempt,
+  API,
+}: {
+  attempt: Attempt;
+  API: string;
+}) {
   const { numberQuestion } = useNumberQuestionStore();
   const { updateCurrentQuestion } = useCurrentQuestionStore();
   const { updateSelectedAnswerId } = useSelectedAnswerIdStore();
@@ -92,7 +98,11 @@ export default function Body({ attempt }: { attempt: Attempt }) {
       />
       <div className="flex-1 p-3 md:p-6">
         <Header packageName={attempt.package.name} />
-        <Content questions={attempt.package.questions} attemptId={attempt.id} />
+        <Content
+          API={API}
+          questions={attempt.package.questions}
+          attemptId={attempt.id}
+        />
       </div>
     </>
   );

@@ -16,6 +16,8 @@ import { Input } from "@/components/ui/input";
 import Link from "next/link";
 import axios from "axios";
 import { useRouter } from "next/navigation";
+import { useNumberQuestionStore } from "../Exam/Body";
+import { useState } from "react";
 
 const formSchema = z.object({
   user_name: z
@@ -30,6 +32,9 @@ const formSchema = z.object({
 export default function FormStoreAttempt({ attemptId }: { attemptId: number }) {
   const router = useRouter();
 
+  const { updateNumber } = useNumberQuestionStore();
+  const [loading, setLoading] = useState(false);
+
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     defaultValues: {
@@ -40,13 +45,17 @@ export default function FormStoreAttempt({ attemptId }: { attemptId: number }) {
 
   async function onSubmit(values: z.infer<typeof formSchema>) {
     try {
+      setLoading(true);
       const response = await axios.post(
         "http://quiz-api.test/api/attempt/store",
         values
       );
+      updateNumber(1);
       router.replace(`/ujian/${response.data.data.id}`);
     } catch (error) {
+      setLoading(false);
       console.log(error);
+      throw new Error("Something went wrong broo!");
     }
   }
 
@@ -73,7 +82,7 @@ export default function FormStoreAttempt({ attemptId }: { attemptId: number }) {
           <Link href="/">
             <Button type="button">Kembali</Button>
           </Link>
-          <Button variant={"destructive"} type="submit">
+          <Button disabled={loading} variant={"destructive"} type="submit">
             Mulai Ujian
           </Button>
         </div>

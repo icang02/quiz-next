@@ -10,20 +10,29 @@ import {
   useUserAnswersStore,
 } from "./Body";
 import { Question } from "@/lib/types";
+import axios from "axios";
+import { useRouter } from "next/navigation";
+import { useState } from "react";
 
 export default function Content({
   attemptId,
   questions,
+  API,
 }: {
   attemptId: number;
   questions: Question[];
+  API: string;
 }) {
+  const router = useRouter();
+
   const { currentQuestion, updateCurrentQuestion } = useCurrentQuestionStore();
   const { selectedAnswerId, updateSelectedAnswerId } =
     useSelectedAnswerIdStore();
   const { updateUserAnswers } = useUserAnswersStore();
   const { numberQuestion, updateNumber } = useNumberQuestionStore();
   const { userAnswers } = useUserAnswersStore();
+
+  const [loading, setLoading] = useState(false);
 
   const submitAnswer = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
@@ -58,6 +67,7 @@ export default function Content({
 
     // Simpan kembali ke localStorage
     localStorage.setItem("userAnswers", JSON.stringify(existingAnswers));
+
     updateUserAnswers(
       existingAnswers.filter((item) => item.attempt_id == attemptId)
     );
@@ -87,6 +97,33 @@ export default function Content({
 
       updateCurrentQuestion(questions[indexQuestion + 1]);
       updateNumber(indexQuestion + 2);
+    }
+  };
+
+  const endExam = async () => {
+    let localAllUserAnswers: UserAnswers[] = JSON.parse(
+      localStorage.getItem("userAnswers") ?? "[]"
+    );
+    const localUserAnswers = localAllUserAnswers.filter(
+      (item) => item.attempt_id === attemptId
+    );
+
+    try {
+      setLoading(true);
+      await axios.post(API + "/ujian/store", {
+        userAnswers: localUserAnswers,
+      });
+
+      localAllUserAnswers = localAllUserAnswers.filter(
+        (item) => item.attempt_id !== attemptId
+      );
+      localStorage.setItem("userAnswers", JSON.stringify(localAllUserAnswers));
+
+      router.replace(`/ujian/${attemptId}/skor`);
+    } catch (error) {
+      setLoading(false);
+      console.log(error);
+      throw new Error("Something went wrong broo!");
     }
   };
 
@@ -144,6 +181,8 @@ export default function Content({
             {userAnswers.length === questions.length && (
               <div>
                 <Button
+                  disabled={loading}
+                  onClick={endExam}
                   type="button"
                   size={"sm"}
                   variant="destructive"

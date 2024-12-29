@@ -19,7 +19,7 @@ export default async function page({ params }: { params: Params }) {
 
   return (
     <div className="flex flex-col md:flex-row min-h-screen">
-      <Body attempt={attempt} />
+      <Body attempt={attempt} API={process.env.API ?? ""} />
     </div>
   );
 }

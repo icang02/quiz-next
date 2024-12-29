@@ -4,6 +4,7 @@ export type Attempt = {
   package_id: number;
   start_time: string;
   end_time: string;
+  score: number;
   package: Package;
 };
 

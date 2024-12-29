@@ -69,7 +69,12 @@ export default function Navigation({
                 ? "success"
                 : "destructive"
             }
-            className="text-[10px] md:text-xs font-semibold select-none"
+            className={`${
+              index === numberQuestion - 1 &&
+              (userAnswers.some((ans) => ans.question_id === q.id)
+                ? "bg-green-600/90"
+                : "bg-destructive/90")
+            } text-[10px] md:text-xs font-semibold select-none`}
           >
             {index + 1}
           </Button>
