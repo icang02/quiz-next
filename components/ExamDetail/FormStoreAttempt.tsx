@@ -14,10 +14,10 @@ import {
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
 import Link from "next/link";
-import axios from "axios";
 import { useRouter } from "next/navigation";
 import { useNumberQuestionStore } from "../Exam/Body";
 import { useState } from "react";
+import axiosApi from "@/lib/axios";
 
 const formSchema = z.object({
   user_name: z
@@ -46,10 +46,7 @@ export default function FormStoreAttempt({ attemptId }: { attemptId: number }) {
   async function onSubmit(values: z.infer<typeof formSchema>) {
     try {
       setLoading(true);
-      const response = await axios.post(
-        "http://quiz-api.test/api/attempt/store",
-        values
-      );
+      const response = await axiosApi.post("/attempt/store", values);
       updateNumber(1);
       router.replace(`/ujian/${response.data.data.id}`);
     } catch (error) {

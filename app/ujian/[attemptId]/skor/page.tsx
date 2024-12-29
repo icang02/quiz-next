@@ -7,8 +7,8 @@ import {
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
+import axiosApi from "@/lib/axios";
 import { Attempt } from "@/lib/types";
-import axios from "axios";
 import Link from "next/link";
 
 type Params = Promise<{ attemptId: string }>;
@@ -18,9 +18,7 @@ export default async function page({ params }: { params: Params }) {
   let attempt: Attempt;
 
   try {
-    const response = await axios(
-      process.env.API + "/ujian/" + attemptId + "/skor"
-    );
+    const response = await axiosApi("/ujian/" + attemptId + "/skor");
     attempt = response.data.data;
   } catch (error) {
     console.log(error);

@@ -5,9 +5,9 @@ import {
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
-import axios from "axios";
 import ErrorPage from "@/components/custom/ErrorPage";
 import FormStoreAttempt from "@/components/ExamDetail/FormStoreAttempt";
+import axiosApi from "@/lib/axios";
 
 type Package = {
   id: number;
@@ -25,9 +25,7 @@ export default async function Page({ params }: { params: Params }) {
   let errorMessage: string = "";
 
   try {
-    const response = await axios.get(
-      `${process.env.API}/package/${slug}`
-    );
+    const response = await axiosApi.get(`/package/${slug}`);
     pkg = response.data.data;
   } catch (error) {
     console.error("Error fetching packages:", error);

@@ -8,8 +8,8 @@ import {
 } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import Link from "next/link";
-import axios from "axios";
 import ErrorPage from "@/components/custom/ErrorPage";
+import axiosApi from "@/lib/axios";
 
 type Package = {
   id: number;
@@ -26,7 +26,7 @@ export default async function Home() {
   let errorMessage: string = "";
 
   try {
-    const response = await axios.get(process.env.API + "/packages");
+    const response = await axiosApi.get("/packages");
     packages = response.data.data;
   } catch (error) {
     console.error("Error fetching packages:", error);

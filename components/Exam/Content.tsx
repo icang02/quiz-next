@@ -10,18 +10,16 @@ import {
   useUserAnswersStore,
 } from "./Body";
 import { Question } from "@/lib/types";
-import axios from "axios";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
+import axiosApi from "@/lib/axios";
 
 export default function Content({
   attemptId,
   questions,
-  API,
 }: {
   attemptId: number;
   questions: Question[];
-  API: string;
 }) {
   const router = useRouter();
 
@@ -110,7 +108,7 @@ export default function Content({
 
     try {
       setLoading(true);
-      await axios.post(API + "/ujian/store", {
+      await axiosApi.post("/ujian/store", {
         userAnswers: localUserAnswers,
       });
 
