@@ -1,4 +1,8 @@
-export default function Header({ numberQuestion, packageName }: { numberQuestion: number, packageName: string }) {
+import { useNumberQuestionStore } from "./Body";
+
+export default function Header({ packageName }: { packageName: string }) {
+  const { numberQuestion } = useNumberQuestionStore();
+
   return (
     <div className="flex justify-between mb-4">
       <h1 className="text-base md:text-xl font-bold">Soal {numberQuestion}</h1>

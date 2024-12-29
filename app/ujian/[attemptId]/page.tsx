@@ -14,7 +14,7 @@ export default async function page({ params }: { params: Params }) {
   } catch (error) {
     console.log(error);
   }
-  
+
   if (!attempt) return <p>Error broww.....</p>;
 
   return (
