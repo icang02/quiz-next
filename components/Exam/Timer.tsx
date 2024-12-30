@@ -125,7 +125,7 @@ export default function Timer({ startTime, endTime, attemptId }: TimerProps) {
       <span
         className={`font-mono text-lg ${
           isCritical
-            ? "text-red-600 animate-pulse duration-[1400]"
+            ? "text-red-600 animate-pulse duration-1000"
             : "text-green-600"
         }`}
       >

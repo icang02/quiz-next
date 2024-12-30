@@ -2,6 +2,7 @@ import { Button } from "@/components/ui/button";
 import { Question } from "@/lib/types";
 import {
   useCurrentQuestionStore,
+  useIsSubmitStore,
   useNumberQuestionStore,
   UserAnswers,
   useSelectedAnswerIdStore,
@@ -20,6 +21,8 @@ export default function Navigation({
   const { updateCurrentQuestion } = useCurrentQuestionStore();
   const { updateSelectedAnswerId } = useSelectedAnswerIdStore();
   const { userAnswers, updateUserAnswers } = useUserAnswersStore();
+
+  const { isSubmit } = useIsSubmitStore();
 
   const handleChangeQuestion = (index: number) => {
     updateCurrentQuestion(questions[index]);
@@ -61,6 +64,7 @@ export default function Navigation({
       <div className="grid grid-cols-6 md:grid-cols-5 gap-1">
         {questions.map((q, index) => (
           <Button
+            disabled={isSubmit}
             onClick={() => handleChangeQuestion(index)}
             key={q.id}
             size={"sm"}

@@ -4,6 +4,7 @@ import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
 import { Button } from "@/components/ui/button";
 import {
   useCurrentQuestionStore,
+  useIsSubmitStore,
   useNumberQuestionStore,
   UserAnswers,
   useSelectedAnswerIdStore,
@@ -31,6 +32,7 @@ export default function Content({
   const { userAnswers } = useUserAnswersStore();
 
   const [loading, setLoading] = useState(false);
+  const { isSubmit } = useIsSubmitStore();
 
   const submitAnswer = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
@@ -159,7 +161,7 @@ export default function Content({
             <div className="mt-6 flex flex-col md:flex-row items-center justify-between select-none">
               <div>
                 <Button
-                  disabled={!selectedAnswerId}
+                  disabled={!selectedAnswerId || isSubmit}
                   type="submit"
                   size={"sm"}
                   className="bg-blue-600 hover:bg-blue-600/90 text-white text-[10px] md:text-xs uppercase tracking-wider"
@@ -167,7 +169,7 @@ export default function Content({
                   Simpan dan Lanjutkan
                 </Button>
                 <Button
-                  disabled={questions.length === numberQuestion}
+                  disabled={questions.length === numberQuestion || isSubmit}
                   onClick={nextQuestion}
                   type="button"
                   size={"sm"}
@@ -180,7 +182,7 @@ export default function Content({
               {userAnswers.length === questions.length && (
                 <div>
                   <Button
-                    disabled={loading}
+                    disabled={loading || isSubmit}
                     onClick={endExam}
                     type="button"
                     size={"sm"}
