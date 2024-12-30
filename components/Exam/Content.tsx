@@ -112,6 +112,7 @@ export default function Content({
       setLoading(true);
       await axiosApi.post("/ujian/store", {
         userAnswers: localUserAnswers,
+        attemptId,
       });
 
       localAllUserAnswers = localAllUserAnswers.filter(
