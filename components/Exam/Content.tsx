@@ -126,73 +126,75 @@ export default function Content({
   };
 
   return (
-    <Card>
-      <CardHeader>
-        <CardTitle className="font-normal text-sm md:text-base select-none">
-          {currentQuestion.question}
-        </CardTitle>
-      </CardHeader>
-      <CardContent>
-        <form onSubmit={submitAnswer} className="-mt-1.5">
-          <RadioGroup className="w-fit">
-            {currentQuestion.answers.map((item, index) => (
-              <div className="flex items-center space-x-2" key={index}>
-                <RadioGroupItem
-                  onClick={() => updateSelectedAnswerId(item.id.toString())}
-                  id={item.id.toString()}
-                  value={item.id.toString()}
-                  checked={item.id.toString() == selectedAnswerId}
-                />
-                <Label
-                  htmlFor={item.id.toString()}
-                  className="py-0.5 text-[13px] md:text-sm"
-                >
-                  <span className="leading-relaxed select-none">
-                    {item.answer}
-                  </span>
-                </Label>
-              </div>
-            ))}
-          </RadioGroup>
+    <>
+      <Card>
+        <CardHeader>
+          <CardTitle className="font-normal text-sm md:text-base select-none">
+            {currentQuestion.question}
+          </CardTitle>
+        </CardHeader>
+        <CardContent>
+          <form onSubmit={submitAnswer} className="-mt-1.5">
+            <RadioGroup className="w-fit">
+              {currentQuestion.answers.map((item, index) => (
+                <div className="flex items-center space-x-2" key={index}>
+                  <RadioGroupItem
+                    onClick={() => updateSelectedAnswerId(item.id.toString())}
+                    id={item.id.toString()}
+                    value={item.id.toString()}
+                    checked={item.id.toString() == selectedAnswerId}
+                  />
+                  <Label
+                    htmlFor={item.id.toString()}
+                    className="py-0.5 text-[13px] md:text-sm"
+                  >
+                    <span className="leading-relaxed select-none">
+                      {item.answer}
+                    </span>
+                  </Label>
+                </div>
+              ))}
+            </RadioGroup>
 
-          <div className="mt-6 flex flex-col md:flex-row items-center justify-between select-none">
-            <div>
-              <Button
-                disabled={!selectedAnswerId}
-                type="submit"
-                size={"sm"}
-                className="bg-blue-600 hover:bg-blue-600/90 text-white text-[10px] md:text-xs uppercase tracking-wider"
-              >
-                Simpan dan Lanjutkan
-              </Button>
-              <Button
-                disabled={questions.length === numberQuestion}
-                onClick={nextQuestion}
-                type="button"
-                size={"sm"}
-                className="ms-1.5 bg-yellow-600 hover:bg-yellow-600/90 text-white text-[10px] md:text-xs uppercase tracking-wider"
-              >
-                Lewatkan
-              </Button>
-            </div>
-
-            {userAnswers.length === questions.length && (
+            <div className="mt-6 flex flex-col md:flex-row items-center justify-between select-none">
               <div>
                 <Button
-                  disabled={loading}
-                  onClick={endExam}
+                  disabled={!selectedAnswerId}
+                  type="submit"
+                  size={"sm"}
+                  className="bg-blue-600 hover:bg-blue-600/90 text-white text-[10px] md:text-xs uppercase tracking-wider"
+                >
+                  Simpan dan Lanjutkan
+                </Button>
+                <Button
+                  disabled={questions.length === numberQuestion}
+                  onClick={nextQuestion}
                   type="button"
                   size={"sm"}
-                  variant="destructive"
-                  className="mt-1.5 md:mt-0 text-[10px] md:text-xs uppercase tracking-wider"
+                  className="ms-1.5 bg-yellow-600 hover:bg-yellow-600/90 text-white text-[10px] md:text-xs uppercase tracking-wider"
                 >
-                  Akhiri Ujian
+                  Lewatkan
                 </Button>
               </div>
-            )}
-          </div>
-        </form>
-      </CardContent>
-    </Card>
+
+              {userAnswers.length === questions.length && (
+                <div>
+                  <Button
+                    disabled={loading}
+                    onClick={endExam}
+                    type="button"
+                    size={"sm"}
+                    variant="destructive"
+                    className="mt-1.5 md:mt-0 text-[10px] md:text-xs uppercase tracking-wider"
+                  >
+                    Akhiri Ujian
+                  </Button>
+                </div>
+              )}
+            </div>
+          </form>
+        </CardContent>
+      </Card>
+    </>
   );
 }

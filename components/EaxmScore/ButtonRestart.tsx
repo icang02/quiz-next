@@ -3,7 +3,7 @@
 import { Button } from "@/components/ui/button";
 import axiosApi from "@/lib/axios";
 import { useRouter } from "next/navigation";
-import { useNumberQuestionStore } from "../Exam/Body";
+import { useNumberQuestionStore, UserAnswers } from "../Exam/Body";
 
 export default function ButtonRestart({ attemptId }: { attemptId: number }) {
   const router = useRouter();
@@ -13,6 +13,16 @@ export default function ButtonRestart({ attemptId }: { attemptId: number }) {
     try {
       await axiosApi.post("/ujian/restart", { attemptId });
       updateNumber(1);
+
+      let existingAnswers: UserAnswers[] = JSON.parse(
+        localStorage.getItem("userAnswers") ?? "[]"
+      );
+      // Simpan kembali ke localStorage
+      existingAnswers = existingAnswers.filter(
+        (item) => item.attempt_id != attemptId
+      );
+      localStorage.setItem("userAnswers", JSON.stringify(existingAnswers));
+
       router.push(`/ujian/${attemptId}`);
     } catch (error) {
       console.log(error);

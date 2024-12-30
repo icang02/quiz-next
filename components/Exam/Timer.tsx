@@ -2,7 +2,7 @@
 
 import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
-import { UserAnswers } from "./Body";
+import { useIsSubmitStore, UserAnswers } from "./Body";
 import axiosApi from "@/lib/axios";
 
 interface TimerProps {
@@ -17,6 +17,8 @@ export default function Timer({ startTime, endTime, attemptId }: TimerProps) {
   const [isCritical, setIsCritical] = useState<boolean>(false);
   const router = useRouter();
 
+  const { isSubmit, updateIsSubmit } = useIsSubmitStore();
+
   const endExam = async () => {
     let localAllUserAnswers: UserAnswers[] = JSON.parse(
       localStorage.getItem("userAnswers") ?? "[]"
@@ -25,10 +27,13 @@ export default function Timer({ startTime, endTime, attemptId }: TimerProps) {
       (item) => item.attempt_id === attemptId
     );
 
+    const data = {
+      userAnswers: localUserAnswers,
+      attemptId: attemptId,
+    };
+
     try {
-      await axiosApi.post("/ujian/store", {
-        userAnswers: localUserAnswers,
-      });
+      await axiosApi.post("/ujian/store", data);
 
       localAllUserAnswers = localAllUserAnswers.filter(
         (item) => item.attempt_id !== attemptId
@@ -39,6 +44,10 @@ export default function Timer({ startTime, endTime, attemptId }: TimerProps) {
     } catch (error) {
       console.log(error);
       throw new Error("Something went wrong broo!");
+    } finally {
+      setTimeout(() => {
+        updateIsSubmit(false);
+      }, 1000);
     }
   };
 
@@ -72,8 +81,7 @@ export default function Timer({ startTime, endTime, attemptId }: TimerProps) {
       if (difference < 0) {
         setTimeLeft("00:00:00");
         setIsCritical(true);
-
-        endExam();
+        updateIsSubmit(true);
         return;
       }
 
@@ -98,6 +106,12 @@ export default function Timer({ startTime, endTime, attemptId }: TimerProps) {
     return () => clearInterval(timerInterval);
   }, [startTime, endTime, router]);
 
+  useEffect(() => {
+    if (isSubmit) {
+      endExam();
+    }
+  }, [isSubmit]);
+
   return (
     <div
       className={`relative group flex items-center justify-center gap-4 px-3 py-1.5 rounded border 
@@ -120,10 +134,10 @@ export default function Timer({ startTime, endTime, attemptId }: TimerProps) {
 
       {/* Durasi total (hidden by default, shown on hover) */}
       <span
-        className="absolute opacity-0 group-hover:opacity-100 group-hover:scale-100 scale-90 transition-all duration-200 font-mono text-sm text-gray-600"
+        className="bg-white px-3 py-2 border absolute opacity-0 group-hover:opacity-100 group-hover:scale-100 scale-90 transition-all duration-200 font-mono text-sm text-gray-600"
         style={{ top: "100%", marginTop: "4px" }}
       >
-        <span className="text-[11px]">Waktu pengerjaan:</span>{" "}
+        <span className="text-[11px]">Durasi:</span> <br />
         <span className="text-green-600">{totalDuration}</span>
       </span>
     </div>

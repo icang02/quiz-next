@@ -64,10 +64,23 @@ export const useUserAnswersStore = create<UserAnswersStore>((set) => ({
 }));
 // =====================================================================
 
+type IsSubmitStore = {
+  isSubmit: boolean;
+  updateIsSubmit: (isSubmit: boolean) => void;
+};
+
+export const useIsSubmitStore = create<IsSubmitStore>((set) => ({
+  isSubmit: false,
+  updateIsSubmit: (isSubmit) => set(() => ({ isSubmit })),
+}));
+// =====================================================================
+
 export default function Body({ attempt }: { attempt: Attempt }) {
   const { numberQuestion } = useNumberQuestionStore();
   const { updateCurrentQuestion } = useCurrentQuestionStore();
   const { updateSelectedAnswerId } = useSelectedAnswerIdStore();
+
+  const { isSubmit } = useIsSubmitStore();
 
   useEffect(() => {
     updateCurrentQuestion(attempt.package.questions[numberQuestion - 1]);
@@ -86,6 +99,13 @@ export default function Body({ attempt }: { attempt: Attempt }) {
 
   return (
     <>
+      {isSubmit && (
+        <div className="absolute z-50 pointer-events-none h-screen w-full bg-[rgba(0,0,0,0.7)] transition-all flex items-center justify-center">
+          <span className="animate-pulse text-sm md:text-base text-white">
+            Loading...
+          </span>
+        </div>
+      )}
       <Navigation
         attemptId={attempt.id}
         questions={attempt.package.questions}
