@@ -69,9 +69,9 @@ export default function Timer({ startTime, endTime, attemptId }: TimerProps) {
       }
 
       // Hitung waktu tersisa
-      if (difference <= 0) {
+      if (difference < 0) {
         setTimeLeft("00:00:00");
-        setIsCritical(false);
+        setIsCritical(true);
 
         endExam();
         return;
