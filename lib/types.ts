@@ -20,6 +20,7 @@ export type Package = {
 export type Answer = {
   id: number;
   answer: string;
+  is_correct: boolean;
 };
 
 export type Question = {

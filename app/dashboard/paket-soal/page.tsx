@@ -43,8 +43,8 @@ export default async function page() {
           <Link key={index} href={`/dashboard/paket-soal/${pkg.id}`}>
             <Card className="hover:shadow-md hover:border hover:border-green-300 transition-all">
               <CardHeader>
-                <CardTitle className="flex gap-2 justify-between">
-                  <div>
+                <CardTitle className="grid grid-cols-12">
+                  <div className="col-span-11">
                     <h5 className="uppercase text-sm">{pkg.name}</h5>
                     <div className="mt-2">
                       <p className="text-sm text-gray-500 font-normal">
@@ -70,8 +70,8 @@ export default async function page() {
                       </div>
                     </div>
                   </div>
-                  <div>
-                    <span className="text-2xl text-gray-600">
+                  <div className="col-span-1">
+                    <span className="text-xl md:text-2xl text-gray-600">
                       #0{index + 1}
                     </span>
                   </div>

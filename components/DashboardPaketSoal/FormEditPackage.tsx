@@ -13,25 +13,31 @@ import { Label } from "@/components/ui/label";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { Button } from "@/components/ui/button";
-import { Plus } from "lucide-react";
+import { PenLine } from "lucide-react";
 import { useState, useTransition } from "react";
 import { toast } from "sonner";
 import axiosApi from "@/lib/axios";
 import { useRouter } from "next/navigation";
 
-type FormAddPackage = {
+type FormEditPackage = {
+  id: number;
   name: string;
   description: string;
 };
 
-export default function FormAddPackage() {
+export default function FormEditPackage({
+  id,
+  name,
+  description,
+}: FormEditPackage) {
   const router = useRouter();
 
   const [isPending, startTransition] = useTransition();
   const [isOpen, setIsOpen] = useState<boolean>();
-  const [form, setForm] = useState<FormAddPackage>({
-    name: "",
-    description: "",
+  const [form, setForm] = useState<FormEditPackage>({
+    id: id,
+    name: name,
+    description: description,
   });
 
   const handleChange = (
@@ -48,7 +54,7 @@ export default function FormAddPackage() {
     e.preventDefault();
 
     startTransition(async () => {
-      const response = await axiosApi.post("/admin/package/store", {
+      const response = await axiosApi.patch(`/admin/package/${id}/update`, {
         package: form,
       });
 
@@ -59,10 +65,6 @@ export default function FormAddPackage() {
           onClick: () => "",
         },
       });
-      setForm({
-        name: "",
-        description: "",
-      });
       setIsOpen(false);
       router.refresh();
     });
@@ -71,14 +73,19 @@ export default function FormAddPackage() {
   return (
     <Dialog open={isOpen} onOpenChange={setIsOpen}>
       <DialogTrigger asChild>
-        <Button onClick={() => setIsOpen(true)} type="button" size={"sm"}>
-          <Plus /> Tambah
+        <Button
+          variant={"warning"}
+          onClick={() => setIsOpen(true)}
+          type="button"
+          size={"sm"}
+        >
+          <PenLine /> Edit Paket
         </Button>
       </DialogTrigger>
       <DialogContent className="sm:max-w-[700px]">
         <form onSubmit={onSubmit}>
           <DialogHeader>
-            <DialogTitle>Tambah Paket Soal</DialogTitle>
+            <DialogTitle>Edit Paket Soal</DialogTitle>
             <DialogDescription>Isi data lalu klik simpan.</DialogDescription>
           </DialogHeader>
           <div className="grid gap-4 py-4">
@@ -111,7 +118,7 @@ export default function FormAddPackage() {
           </div>
           <DialogFooter>
             <Button disabled={isPending} type="submit">
-              Simpan
+              Update
             </Button>
           </DialogFooter>
         </form>
